@@ -240,13 +240,15 @@ export const RejectInvite = async (user) => {
       console.log(error);
     });
 };
-export const updateUser = (userId, token, user) => {
-  return fetch(`${API}/updateUser/`, {
+export const updateUser = (token, user) => {
+  console.log("Helloo: ", token);
+  console.log("USER: ", user);
+  return fetch(`${API}updateUser`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      Authorization: `${token}`,
     },
     body: JSON.stringify(user),
   })

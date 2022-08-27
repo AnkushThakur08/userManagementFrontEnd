@@ -20,14 +20,14 @@ import {
 } from "../../helper/ApiCall";
 
 const { data } = isAuthenticated();
-console.log(data.user.name);
-console.log(data.user.email);
+// console.log(data.user.name);
+// console.log(data.user.email);
 
 const initialState = {
   email: "",
   name: "",
-  senderName: `${data.user.name}`,
-  senderid: `${data.user.email}`,
+  // senderName: `${data.user.name}`,
+  // senderid: `${data.user.email}`,
   success: false,
   error: "",
 };

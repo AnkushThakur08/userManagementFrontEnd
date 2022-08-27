@@ -10,13 +10,19 @@ import { FormRow } from "../../components";
 import Wrapper from "../../assets/wrappers/DashboardFormPage";
 
 // API
-import { updateUser, authenticate } from "../../helper/ApiCall";
+import {
+  updateUser,
+  authenticate,
+  isAuthenticated,
+} from "../../helper/ApiCall";
 
 const ProfilePage = () => {
   const [userData, setUserData] = useState({
     gender: "",
     age: "",
     address: "",
+    error: "",
+    success: false,
   });
 
   const handleChange = (e) => {
@@ -36,6 +42,31 @@ const ProfilePage = () => {
       console.log("Please Fill out all the Fields");
       toast.error("Please Fill out all the Fields");
     }
+    let user = isAuthenticated().data;
+    let userId = user.user.id;
+
+    updateUser(user.token, { userId, gender, age, address })
+      .then((data) => {
+        console.log(data);
+        if (data.data.status == 400) {
+          toast.error(data.data.message);
+          setUserData({
+            ...userData,
+            error: data.data.message,
+            success: false,
+          });
+        } else if (data.data.status == 200) {
+          userData({
+            ...userData,
+            success: true,
+          });
+          toast.success(data.data.message);
+        }
+      })
+      .catch((error) => {
+        toast.error("Unable to Process your Request");
+        console.log("Unable to Prcoess your Request");
+      });
   };
 
   return (
