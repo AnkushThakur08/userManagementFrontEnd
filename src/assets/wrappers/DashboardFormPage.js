@@ -48,6 +48,18 @@ const Wrapper = styled.section`
   .clear-btn:hover {
     background: var(--black);
   }
+
+  .chatRight {
+    background: #4dd637;
+    /* background: #03c6c7; */ /* Teal Color */
+    margin: 10px;
+    padding: 5px;
+    padding-right: 22px;
+    border-radius: 10px;
+    margin-left: 0px;
+    /* justify-content: justify-content;  */
+  }
+
   @media (min-width: 992px) {
     .form-center {
       grid-template-columns: 1fr 1fr;
@@ -58,7 +70,6 @@ const Wrapper = styled.section`
       margin-top: 0;
     }
   }
-
 
   @media (min-width: 1120px) {
     .form-center {

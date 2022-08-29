@@ -31,16 +31,15 @@ const ChatPage = (/* { user = null, db = null } */) => {
 
       {console.log(messages)}
       {messages.map(({ id, text, senderId, senderName }) => (
-        <div style={{ display: "flex" }}>
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
           <div
             key={id}
             style={{
-              backgroundColor: "#3b82f6",
+              backgroundColor: "#dbeafe",
               margin: "10px",
-
-              padding: "5px",
+              padding: "8px",
               paddingRight: "22px",
-              borderRadius: "5px",
+              borderRadius: "10px",
               marginLeft: "0px",
             }}
           >
@@ -49,6 +48,17 @@ const ChatPage = (/* { user = null, db = null } */) => {
           </div>
         </div>
       ))}
+
+      <div>
+        {messages.map(({ id, text, senderId, senderName }) => (
+          <div style={{ display: "flex" }}>
+            <div className="chatRight" key={id}>
+              <h6 style={{ margin: 0 }}>{senderName}</h6>
+              <p style={{ marginTop: 0 }}>{text}</p>
+            </div>
+          </div>
+        ))}
+      </div>
 
       <SendMessage />
     </Wrapper>
