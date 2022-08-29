@@ -30,9 +30,23 @@ const ChatPage = (/* { user = null, db = null } */) => {
       {console.log("Ankush")}
 
       {console.log(messages)}
-      {messages.map(({ id, text }) => (
-        <div key={id}>
-          <p>{text}</p>
+      {messages.map(({ id, text, senderId, senderName }) => (
+        <div style={{ display: "flex" }}>
+          <div
+            key={id}
+            style={{
+              backgroundColor: "#3b82f6",
+              margin: "10px",
+
+              padding: "5px",
+              paddingRight: "22px",
+              borderRadius: "5px",
+              marginLeft: "0px",
+            }}
+          >
+            <h6 style={{ margin: 0 }}>{senderName}</h6>
+            <p style={{ margin: 0 }}>{text}</p>
+          </div>
         </div>
       ))}
 
