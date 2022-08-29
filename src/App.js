@@ -1,5 +1,5 @@
-import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React, { useEffect } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 // React-Toastify
 import { ToastContainer } from "react-toastify";
@@ -36,17 +36,45 @@ import {
 
 // Protected Routes
 import PrivateRoute from "./helper/PrivateRoutes";
+import { isAuthenticated } from "./helper/ApiCall";
 
 const App = () => {
   return (
     <BrowserRouter>
+      {console.log(Boolean(isAuthenticated()))}
       <Routes>
-        <Route path="/" element={<NavBar />}>
-          <Route index element={<StatsPage />} />
-          <Route path="Chat" element={<ChatPage />} />
-          <Route path="Friend" element={<FriendsPage />} />
-          <Route path="Notification" element={<NotificationPage />} />
-          <Route path="Profile" element={<ProfilePage />} />
+        <Route
+          path="/"
+          element={isAuthenticated() ? <NavBar /> : <Navigate to="/home" />}
+        >
+          <Route
+            index
+            element={
+              isAuthenticated() ? <StatsPage /> : <Navigate to="/home" />
+            }
+          />
+          <Route
+            path="Chat"
+            element={isAuthenticated() ? <ChatPage /> : <Navigate to="/home" />}
+          />
+          <Route
+            path="Friend"
+            element={
+              isAuthenticated() ? <FriendsPage /> : <Navigate to="/home" />
+            }
+          />
+          <Route
+            path="Notification"
+            element={
+              isAuthenticated() ? <NotificationPage /> : <Navigate to="/home" />
+            }
+          />
+          <Route
+            path="Profile"
+            element={
+              isAuthenticated() ? <ProfilePage /> : <Navigate to="/home" />
+            }
+          />
         </Route>
 
         <Route path="/home" element={<LandingPage />} />

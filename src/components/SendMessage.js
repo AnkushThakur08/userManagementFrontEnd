@@ -10,6 +10,7 @@ import { db } from "../Config/firebaseConfig";
 
 // CSS
 import Wrapper from "../assets/wrappers/DashboardFormPage";
+import { isAuthenticated } from "../helper/ApiCall";
 
 const SendMessage = () => {
   const [msg, setMsg] = useState("");
@@ -17,8 +18,13 @@ const SendMessage = () => {
 
   const sendMessage = async (e) => {
     e.preventDefault();
+    let user = isAuthenticated().data;
+    let senderId = user.user.id;
+    let senderName = user.user.name;
 
     await db.collection("messages").add({
+      senderId: senderId,
+      senderName: senderName,
       text: msg,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     });

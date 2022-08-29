@@ -18,7 +18,7 @@ const ChatPage = (/* { user = null, db = null } */) => {
   useEffect(() => {
     db.collection("messages")
       .orderBy("createdAt")
-      .limit(100)
+      .limit(50)
       .onSnapshot((snapshot) => {
         setMessages(snapshot.docs.map((doc) => doc.data()));
       });
@@ -29,6 +29,7 @@ const ChatPage = (/* { user = null, db = null } */) => {
       <h3>Chat Section</h3>
       {console.log("Ankush")}
 
+      {console.log(messages)}
       {messages.map(({ id, text }) => (
         <div key={id}>
           <p>{text}</p>

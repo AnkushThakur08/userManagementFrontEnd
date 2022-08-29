@@ -240,10 +240,9 @@ export const RejectInvite = async (user) => {
       console.log(error);
     });
 };
-export const updateUser = (token, user) => {
-  console.log("Helloo: ", token);
-  console.log("USER: ", user);
-  return fetch(`${API}updateUser`, {
+
+export const updateUser = async (token, user) => {
+  return await fetch(`${API}updateUser`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -259,8 +258,6 @@ export const updateUser = (token, user) => {
 };
 
 export const registrationByGoogle = async (user) => {
-  console.log(API);
-  console.log(user);
   return await fetch(`${API}/google`, {
     method: "GET",
 

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import main from "../assets/images/main.svg";
 import Wrapper from "../assets/wrappers/LandingPage";
 import { Logo } from "../components/index";
+import { isAuthenticated } from "../helper/ApiCall";
 
 const LandingPage = () => {
   return (
@@ -22,7 +23,10 @@ const LandingPage = () => {
               ametlorem ipsum dolor sit ametlorem ipsum dolor sit amet
             </p>
 
-            <Link to="/Registration" className="btn btn-hero">
+            <Link
+              to={isAuthenticated() ? "/" : "/Registration"}
+              className="btn btn-hero"
+            >
               Login/Register
             </Link>
           </div>

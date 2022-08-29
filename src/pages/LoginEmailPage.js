@@ -32,9 +32,6 @@ const LoginEmailPage = () => {
 
   const [values, setValues] = useState(initialState);
 
-  // const { user } = isAuthenticated();
-  // console.log("AUSER", user);
-
   console.log(`${API}`);
 
   const handleChange = (e) => {
