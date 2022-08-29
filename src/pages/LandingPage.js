@@ -23,10 +23,7 @@ const LandingPage = () => {
               ametlorem ipsum dolor sit ametlorem ipsum dolor sit amet
             </p>
 
-            <Link
-              to={isAuthenticated() ? "/" : "/Registration"}
-              className="btn btn-hero"
-            >
+            <Link to="/Registration" className="btn btn-hero">
               Login/Register
             </Link>
           </div>
