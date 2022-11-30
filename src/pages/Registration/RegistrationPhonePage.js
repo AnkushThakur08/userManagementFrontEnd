@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 // React-Router
 import { Link, useNavigate } from "react-router-dom";
@@ -7,35 +7,28 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 // Components
-import { Logo, FormRow } from "../components";
-
-// Icons
-import { FcGoogle } from "react-icons/fc";
-import { AiFillFacebook } from "react-icons/ai";
+import { Logo, FormRow } from "../../components";
 
 // CSS
-import Wrapper from "../assets/wrappers/RegisterPage";
+import Wrapper from "../../assets/wrappers/RegisterPage";
 
 // API
-import { API } from "../backend";
-import { signup } from "../helper/ApiCall";
-import { registrationByGoogle } from "../helper/ApiCall";
+import { signup } from "../../helper/ApiCall";
+import { registrationOTP } from "../../helper/ApiCall";
+import { API } from "../../backend";
 
 const initialState = {
   name: "",
-  email: "",
+  phoneNumber: "",
   password: "",
   success: false,
   error: "",
-  didRedirect: false,
 };
 
-const RegistrationEmailPage = () => {
+const RegistrationPhonePage = () => {
   const navigate = useNavigate();
 
   const [values, setValues] = useState(initialState);
-
-  const { name, email, password, didRedirect } = values;
 
   console.log(`${API}`);
 
@@ -45,21 +38,26 @@ const RegistrationEmailPage = () => {
     const value = e.target.value;
     console.log(`${name}: ${value}`);
 
-    setValues({ ...values, error: false, [name]: value });
+    setValues({ ...values, [name]: value });
   };
 
-  // When user Enter Email & Password
+  // When User entered PhoneNumber & Passoword
   const onSubmit = (e) => {
     e.preventDefault();
     console.log(e.target);
 
-    if (!email || !password || !name) {
+    const { name, phoneNumber, password } = values;
+    console.log(phoneNumber);
+    console.log(name);
+    console.log(password);
+
+    if (!phoneNumber || !password || !name) {
       console.log("Please Fill out all the Fields");
       return toast.error("Please Fill out all the Fields");
     }
     setValues({ ...values, error: false });
 
-    signup({ name, email, password })
+    signup({ name, phoneNumber, password })
       .then((data) => {
         // toast.error(data.data.message);
         console.log(data);
@@ -75,12 +73,12 @@ const RegistrationEmailPage = () => {
             password: "",
             error: "",
             success: true,
-            didRedirect: true,
+            isMember: false,
           });
           toast.success(data.data.message);
 
           setTimeout(() => {
-            navigate("/Login");
+            navigate("/LoginNumber");
           }, 3000);
 
           console.log("Ankush");
@@ -92,14 +90,23 @@ const RegistrationEmailPage = () => {
       });
   };
 
-  // When User Registered with Google
-  const RegistrationByGoogle = (e) => {
+  // When user Requests for OTP
+  const SendOTP = (e) => {
+    console.log("SUCCESS");
     e.preventDefault();
     console.log(e.target);
 
+    const { name, phoneNumber } = values;
+    console.log(phoneNumber);
+    console.log(name);
+
+    if (!phoneNumber || !name) {
+      console.log("Please Enter Name And Phone Number");
+      return toast.error("Please Enter Name And Phone Number");
+    }
     setValues({ ...values, error: false });
 
-    registrationByGoogle()
+    registrationOTP({ name, phoneNumber })
       .then((data) => {
         // toast.error(data.data.message);
         console.log(data);
@@ -109,40 +116,54 @@ const RegistrationEmailPage = () => {
           setValues({ ...values, error: data.data.message, success: false });
         } else if (data.data.status == 200) {
           setValues({
-            error: "",
+            ...values,
+            name: "",
+            phoneNumber: "",
             success: true,
           });
           toast.success(data.data.message);
           console.log("Ankush");
+
+          setTimeout(() => {
+            navigate("/verify");
+          }, 3000);
         }
       })
       .catch((error) => {
-        toast.error("Error in registration");
-        console.log("Error in registration");
+        toast.error("Error in Sending the OTP");
+        console.log("Error in Sending the OTP");
       });
   };
 
   return (
     <div>
       <Wrapper className="full-page">
-        {/* {performRedirect()} */}
         <form className="form" onSubmit={onSubmit}>
           <Logo />
-          <h3>Register With Email</h3>
+          <h3>
+            {values.isMember
+              ? "Login with Phone Number"
+              : "Register with Phone Number"}
+          </h3>
+
           {/* Name Field */}
+          {!values.isMember && (
+            <FormRow
+              type="text"
+              name="name"
+              values={values.name}
+              handleChange={handleChange}
+            />
+          )}
+
+          {/* Phone Number Field */}
           <FormRow
             type="text"
-            name="name"
-            values={values.name}
+            name="phoneNumber"
+            values={values.phoneNumber}
             handleChange={handleChange}
           />
-          {/* Email Field */}
-          <FormRow
-            type="email"
-            name="email"
-            values={values.email}
-            handleChange={handleChange}
-          />
+
           {/* Password Field */}
           <FormRow
             type="password"
@@ -150,40 +171,42 @@ const RegistrationEmailPage = () => {
             values={values.password}
             handleChange={handleChange}
           />
-          <button type="submit" className="btn btn-block" onClick={onSubmit}>
+
+          <button type="submit" className="btn btn-block" onSubmit={onSubmit}>
             SignUp
           </button>
+
           <p>
             {values.isMember ? "Not a Member Yet?" : "Already a Member? "}
 
-            <Link to="/Login" className="member-btn">
+            {/* <button type="button" onClick={toggleMember} className="member-btn">
+              {values.isMember ? "Register" : "Login"}
+            </button> */}
+
+            <Link to="/LoginNumber" className="member-btn">
               Login
             </Link>
 
             <span>
-              <Link to="/Phone" className="member-btn">
-                Register with Phone Number
+              <Link to="/Registration" className="member-btn">
+                Register with Email
               </Link>
             </span>
           </p>
 
-          <div className="socialButtonWrapper">
-            <button
-              type="submit"
-              className="socialButton"
-              onClick={RegistrationByGoogle}
-            >
-              <FcGoogle size={48} />
-            </button>
+          <h3>OR</h3>
 
-            <button type="submit" className="socialButton" onClick={onSubmit}>
-              <AiFillFacebook size={48} color="#3b82f6" />
-            </button>
-          </div>
+          <Link
+            to="/verify"
+            className="btn btn-hero btn-block"
+            onClick={SendOTP}
+          >
+            Request For OTP
+          </Link>
         </form>
       </Wrapper>
     </div>
   );
 };
 
-export default RegistrationEmailPage;
+export default RegistrationPhonePage;

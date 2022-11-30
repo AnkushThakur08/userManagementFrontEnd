@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 // React-Router
 import { Link, useNavigate } from "react-router-dom";
@@ -7,29 +7,35 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 // Components
-import { Logo, FormRow } from "../components";
+import { Logo, FormRow } from "../../components";
+
+// Icons
+import { FcGoogle } from "react-icons/fc";
+import { AiFillFacebook } from "react-icons/ai";
 
 // CSS
-import Wrapper from "../assets/wrappers/RegisterPage";
+import Wrapper from "../../assets/wrappers/RegisterPage";
 
 // API
-import { signup } from "../helper/ApiCall";
-import { registrationOTP } from "../helper/ApiCall";
-import { API } from "../backend";
+import { API } from "../../backend";
+import { authenticate, signup } from "../../helper/ApiCall";
+import { registrationByGoogle } from "../../helper/ApiCall";
 
 const initialState = {
   name: "",
-  phoneNumber: "",
+  email: "",
   password: "",
-  isMember: false /* User is not Registered  */,
   success: false,
   error: "",
+  didRedirect: false,
 };
 
-const RegistrationPhonePage = () => {
+const RegistrationEmailPage = () => {
   const navigate = useNavigate();
 
   const [values, setValues] = useState(initialState);
+
+  const { name, email, password, didRedirect } = values;
 
   console.log(`${API}`);
 
@@ -39,26 +45,21 @@ const RegistrationPhonePage = () => {
     const value = e.target.value;
     console.log(`${name}: ${value}`);
 
-    setValues({ ...values, [name]: value });
+    setValues({ ...values, error: false, [name]: value });
   };
 
-  // When User entered PhoneNumber & Passoword
+  // When user Enter Email & Password
   const onSubmit = (e) => {
     e.preventDefault();
     console.log(e.target);
 
-    const { name, phoneNumber, password, isMember } = values;
-    console.log(phoneNumber);
-    console.log(name);
-    console.log(password);
-
-    if (!phoneNumber || !password || !name) {
+    if (!email || !password || !name) {
       console.log("Please Fill out all the Fields");
       return toast.error("Please Fill out all the Fields");
     }
     setValues({ ...values, error: false });
 
-    signup({ name, phoneNumber, password })
+    signup({ name, email, password })
       .then((data) => {
         // toast.error(data.data.message);
         console.log(data);
@@ -74,12 +75,12 @@ const RegistrationPhonePage = () => {
             password: "",
             error: "",
             success: true,
-            isMember: false,
+            didRedirect: true,
           });
           toast.success(data.data.message);
 
           setTimeout(() => {
-            navigate("/LoginNumber");
+            navigate("/Login");
           }, 3000);
 
           console.log("Ankush");
@@ -91,23 +92,14 @@ const RegistrationPhonePage = () => {
       });
   };
 
-  // When user Requests for OTP
-  const SendOTP = (e) => {
-    console.log("SUCCESS");
+  // When User Registered with Google
+  const RegistrationByGoogle = (e) => {
     e.preventDefault();
     console.log(e.target);
 
-    const { name, phoneNumber } = values;
-    console.log(phoneNumber);
-    console.log(name);
+    // setValues({ ...values, error: false });
 
-    if (!phoneNumber || !name) {
-      console.log("Please Enter Name And Phone Number");
-      return toast.error("Please Enter Name And Phone Number");
-    }
-    setValues({ ...values, error: false });
-
-    registrationOTP({ name, phoneNumber })
+    registrationByGoogle()
       .then((data) => {
         // toast.error(data.data.message);
         console.log(data);
@@ -116,55 +108,66 @@ const RegistrationPhonePage = () => {
           toast.error(data.data.message);
           setValues({ ...values, error: data.data.message, success: false });
         } else if (data.data.status == 200) {
-          setValues({
-            ...values,
-            name: "",
-            phoneNumber: "",
-            success: true,
+          authenticate(data, () => {
+            setValues({
+              ...values,
+              success: true,
+              isMember: false,
+            });
+            console.log("THIS IS DATA", data);
+            toast.success(data.data.message);
+            console.log("Ankush");
+
+            setTimeout(() => {
+              navigate("/");
+            }, 3000);
           });
+
           toast.success(data.data.message);
           console.log("Ankush");
-
-          setTimeout(() => {
-            navigate("/verify");
-          }, 3000);
         }
       })
       .catch((error) => {
-        toast.error("Error in Sending the OTP");
-        console.log("Error in Sending the OTP");
+        toast.error("Error in registration");
+        console.log("Error in registration");
       });
+  };
+
+  const RegistrationByGoogle1 = (e) => {
+    e.preventDefault();
+    console.log(e.target);
+
+    window.open(`http://localhost:8000/api/google/`, "_self");
+  };
+
+  const RegistrationByFacebook = (e) => {
+    e.preventDefault();
+    console.log(e.target);
+
+    window.open(`http://localhost:8000/api/auth/facebook`, "_self");
   };
 
   return (
     <div>
       <Wrapper className="full-page">
+        {/* {performRedirect()} */}
         <form className="form" onSubmit={onSubmit}>
           <Logo />
-          <h3>
-            {values.isMember
-              ? "Login with Phone Number"
-              : "Register with Phone Number"}
-          </h3>
-
+          <h3>Register With Email</h3>
           {/* Name Field */}
-          {!values.isMember && (
-            <FormRow
-              type="text"
-              name="name"
-              values={values.name}
-              handleChange={handleChange}
-            />
-          )}
-
-          {/* Phone Number Field */}
           <FormRow
             type="text"
-            name="phoneNumber"
-            values={values.phoneNumber}
+            name="name"
+            values={values.name}
             handleChange={handleChange}
           />
-
+          {/* Email Field */}
+          <FormRow
+            type="email"
+            name="email"
+            values={values.email}
+            handleChange={handleChange}
+          />
           {/* Password Field */}
           <FormRow
             type="password"
@@ -172,42 +175,44 @@ const RegistrationPhonePage = () => {
             values={values.password}
             handleChange={handleChange}
           />
-
-          <button type="submit" className="btn btn-block" onSubmit={onSubmit}>
+          <button type="submit" className="btn btn-block" onClick={onSubmit}>
             SignUp
           </button>
-
           <p>
             {values.isMember ? "Not a Member Yet?" : "Already a Member? "}
 
-            {/* <button type="button" onClick={toggleMember} className="member-btn">
-              {values.isMember ? "Register" : "Login"}
-            </button> */}
-
-            <Link to="/LoginNumber" className="member-btn">
+            <Link to="/Login" className="member-btn">
               Login
             </Link>
 
             <span>
-              <Link to="/Registration" className="member-btn">
-                Register with Email
+              <Link to="/Phone" className="member-btn">
+                Register with Phone Number
               </Link>
             </span>
           </p>
 
-          <h3>OR</h3>
+          <div className="socialButtonWrapper">
+            <button
+              type="submit"
+              className="socialButton"
+              onClick={RegistrationByGoogle1}
+            >
+              <FcGoogle size={48} />
+            </button>
 
-          <Link
-            to="/verify"
-            className="btn btn-hero btn-block"
-            onClick={SendOTP}
-          >
-            Request For OTP
-          </Link>
+            <button
+              type="submit"
+              className="socialButton"
+              onClick={RegistrationByFacebook}
+            >
+              <AiFillFacebook size={48} color="#3b82f6" />
+            </button>
+          </div>
         </form>
       </Wrapper>
     </div>
   );
 };
 
-export default RegistrationPhonePage;
+export default RegistrationEmailPage;

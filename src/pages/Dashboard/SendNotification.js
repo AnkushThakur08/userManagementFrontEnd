@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 
 // Components
 import { FormRow } from "../../components";
+import friend from "../../assets/images/friend.svg";
 
 // CSS
 import Wrapper from "../../assets/wrappers/DashboardFormPage";
@@ -18,6 +19,9 @@ import {
   isAuthenticated,
 } from "../../helper/ApiCall";
 
+//TODO: One Signal
+import OneSignal from "react-onesignal";
+
 const { data } = isAuthenticated();
 // console.log(data.user.name);
 // console.log(data.user.email);
@@ -25,21 +29,28 @@ const { data } = isAuthenticated();
 const initialState = {
   email: "",
   name: "",
-  senderName: data ? `${data.user.name}` : "Ankush",
   // senderName: `${data.user.name}`,
   // senderid: `${data.user.email}`,
-  senderid: data ? `${data.user.email}` : "",
   success: false,
   error: "",
 };
-const FriendsPage = () => {
+const SendNotificationPage = () => {
+  // TODO: OneSignal
+  useEffect(() => {
+    OneSignal.init({ appId: "1e4998de-a9b4-4284-8997-69c036c5c775" });
+  }, []);
+
+  const onHandleTag = (tag) => {
+    console.log("Tagging");
+    OneSignal.sendTag("User", tag).then(() => {});
+  };
+
   // const [user, setUser] = useState([]);
-  // const user10 = localStorage.getItem("jwt");
-  // console.log(user10);
   const [values, setValues] = useState(initialState);
 
   console.log(values.senderName);
   console.log(values.senderid);
+  console.log(values);
 
   const { email, name, senderName, senderid } = values;
 
@@ -60,7 +71,7 @@ const FriendsPage = () => {
       toast.error("Please Fill out all the Fields");
     }
 
-    SendInviteFriendMail({ name, email, senderName, senderid })
+    SendInviteFriendMail({ name, email })
       .then((data) => {
         console.log(data);
         if (data.data.status == 400) {
@@ -140,6 +151,7 @@ const FriendsPage = () => {
               />
 
               <br />
+
               <div>
                 <button
                   type="submit"
@@ -147,6 +159,26 @@ const FriendsPage = () => {
                   onClick={onSubmit}
                 >
                   Invite Friend
+                </button>
+              </div>
+
+              <div>
+                <button
+                  type="submit"
+                  className="btn btn-block "
+                  onClick={onHandleTag("React")}
+                >
+                  React
+                </button>
+              </div>
+
+              <div>
+                <button
+                  type="submit"
+                  className="btn btn-block "
+                  onClick={onHandleTag("JavaScript")}
+                >
+                  JavaScript
                 </button>
               </div>
             </div>
@@ -158,4 +190,4 @@ const FriendsPage = () => {
   );
 };
 
-export default FriendsPage;
+export default SendNotificationPage;

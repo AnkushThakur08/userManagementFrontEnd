@@ -1,7 +1,13 @@
 import React from "react";
+
+// React Router
 import { Link } from "react-router-dom";
-import notFoundImage from "../assets/images/not-found.svg";
-import Wrapper from "../assets/wrappers/ErrorPage";
+
+// Assets
+import notFoundImage from "../../assets/images/not-found.svg";
+
+// CSS
+import Wrapper from "../../assets/wrappers/ErrorPage";
 
 const ErrorPage = () => {
   return (

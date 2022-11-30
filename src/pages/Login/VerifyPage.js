@@ -6,62 +6,47 @@ import { Link, useNavigate } from "react-router-dom";
 // Toast
 import { toast } from "react-toastify";
 
-// Components
-import { Logo, FormRow } from "../components";
-import ForgetPassword from "../assets/images/forgetPassword.svg";
-
 // CSS
-import Wrapper from "../assets/wrappers/RegisterPage";
+import Wrapper from "../../assets/wrappers/RegisterPage";
+
+// Components
+import Verify from "../../assets/images/verify.svg";
+import { Logo, FormRow } from "../../components";
 
 // API
-import { API } from "../backend";
-import { loginOTP } from "../helper/ApiCall";
+import { verifyOTP } from "../../helper/ApiCall";
 
-const initialState = {
-  phoneNumber: "",
-  success: false,
-  error: "",
-};
-
-const ForgetPhonePasswordPage = () => {
+const VerifyPage = () => {
   const navigate = useNavigate();
 
-  const [values, setValues] = useState(initialState);
-
-  const { phoneNumber } = values;
-
-  console.log(`${API}`);
+  const [values, setValues] = useState({
+    OTP: "",
+    error: "",
+    success: "false",
+  });
 
   const handleChange = (e) => {
     console.log(e.target);
     const name = e.target.name;
     const value = e.target.value;
     console.log(`${name}: ${value}`);
-
     setValues({ ...values, error: false, [name]: value });
   };
 
   const onSubmit = (e) => {
-    e.preventDefault();
-    console.log(e.target);
-  };
-
-  // When user Enter Email & Password
-  const SendOTP = (e) => {
     console.log("SUCCESS");
     e.preventDefault();
     console.log(e.target);
 
-    const { phoneNumber } = values;
-    console.log(phoneNumber);
+    const { OTP } = values;
 
-    if (!phoneNumber) {
-      console.log("Please Enter the Phone Number");
-      return toast.error("Please Enter the Phone Number");
+    if (!OTP) {
+      console.log("Please Enter the OTP");
+      return toast.error("Please Enter the OTP");
     }
     setValues({ ...values, error: false });
 
-    loginOTP({ phoneNumber })
+    verifyOTP({ OTP })
       .then((data) => {
         // toast.error(data.data.message);
         console.log(data);
@@ -72,22 +57,20 @@ const ForgetPhonePasswordPage = () => {
         } else if (data.data.status == 200) {
           setValues({
             ...values,
-            phoneNumber: "",
+            OTP: "",
             success: true,
-            error: "false",
           });
           toast.success(data.data.message);
-
           console.log("Ankush");
 
           setTimeout(() => {
-            navigate("/resetPhone");
+            navigate("/verifyLogin");
           }, 3000);
         }
       })
       .catch((error) => {
-        toast.error("Error in Sending the OTP");
-        console.log("Error in Sending the OTP");
+        toast.error("Unable to Verify the OTP");
+        console.log("Unable to Verify the OTP");
       });
   };
 
@@ -96,30 +79,33 @@ const ForgetPhonePasswordPage = () => {
       <Wrapper className="full-page">
         <form className="form" onSubmit={onSubmit}>
           <Logo />
+
           <h3>
-            <h3>Forget Password</h3>
-            <img
-              className="img-fluid smallforgetPassword"
-              src={ForgetPassword}
-              alt=""
-            />
+            <img className="img-fluid smallVerifyImage" src={Verify} alt="" />
           </h3>
 
-          {/* Phone Number Field */}
           <FormRow
             type="text"
-            name="phoneNumber"
-            values={values.phoneNumber}
+            name="OTP"
+            values={values.OTP}
             handleChange={handleChange}
           />
 
-          <button type="submit" className="btn btn-block" onClick={SendOTP}>
-            Send OTP
+          <button type="submit" className="btn btn-block" onClick={onSubmit}>
+            Submit
           </button>
+
+          <p>
+            <span>
+              <Link to="/home" className="member-btn centerinVerifyPage">
+                Go Back to Home
+              </Link>
+            </span>
+          </p>
         </form>
       </Wrapper>
     </div>
   );
 };
 
-export default ForgetPhonePasswordPage;
+export default VerifyPage;

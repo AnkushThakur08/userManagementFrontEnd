@@ -1,5 +1,4 @@
-/* Normalizing */
-*,
+Normalizing *,
 ::after,
 ::before {
   box-sizing: border-box;

@@ -6,6 +6,7 @@ import ChartContainer from "./ChartContainer";
 import BarCharts from "./BarCharts";
 import AreaCharts from "./AreaCharts";
 import SendMessage from "./SendMessage";
+import Pagination from "./Pagination";
 
 export {
   Logo,
@@ -16,4 +17,5 @@ export {
   BarCharts,
   AreaCharts,
   SendMessage,
+  Pagination,
 };

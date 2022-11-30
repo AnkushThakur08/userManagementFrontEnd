@@ -51,7 +51,7 @@ const BigSideBarWrapper = styled.aside`
       color: var(--grey-900);
     }
     .nav-link:hover .icon {
-      color: var(--primary-500);
+      color: var(--primary-500) ;
     }
     .icon {
       font-size: 1.5rem;

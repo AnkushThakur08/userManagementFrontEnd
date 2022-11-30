@@ -1,36 +1,47 @@
 import React, { useState } from "react";
 
 // React-Router
-import { Link, useNavigate } from "react-router-dom";
+
+import { useNavigate, Link } from "react-router-dom";
 
 // Toast
 import { toast } from "react-toastify";
 
-// CSS
-import Wrapper from "../assets/wrappers/RegisterPage";
-
 // Components
-import Verify from "../assets/images/verify.svg";
-import { Logo, FormRow } from "../components";
+import { Logo, FormRow } from "../../components";
+import ForgetPassword from "../../assets/images/forget2.svg";
+
+// CSS
+import Wrapper from "../../assets/wrappers/RegisterPage";
 
 // API
-import { verifyOTPLogin, authenticate } from "../helper/ApiCall";
+import { API } from "../../backend";
+import { SaveNewPhonePassword } from "../../helper/ApiCall";
 
-const VerifyLoginOTPPage = () => {
+const initialState = {
+  phoneNumber: "",
+  OTP: "",
+  password: "",
+  success: false,
+  error: "",
+};
+
+const CreateNewPhonePasswordPage = () => {
+  //   Navigate
   const navigate = useNavigate();
 
-  const [values, setValues] = useState({
-    phoneNumber: "",
-    OTP: "",
-    error: "",
-    success: "false",
-  });
+  const [values, setValues] = useState(initialState);
+
+  const { phoneNumber, OTP, password } = values;
+
+  console.log(`${API}`);
 
   const handleChange = (e) => {
     console.log(e.target);
     const name = e.target.name;
     const value = e.target.value;
     console.log(`${name}: ${value}`);
+
     setValues({ ...values, error: false, [name]: value });
   };
 
@@ -39,15 +50,15 @@ const VerifyLoginOTPPage = () => {
     e.preventDefault();
     console.log(e.target);
 
-    const { phoneNumber, OTP } = values;
+    const { phoneNumber, OTP, password } = values;
 
-    if (!OTP || !phoneNumber) {
-      console.log("Please Enter the Number & OTP");
-      return toast.error("Please Enter the Number & OTP");
+    if (!OTP || !phoneNumber || !password) {
+      console.log("Please fill out all the fields");
+      return toast.error("Please fill out all the fields");
     }
     setValues({ ...values, error: false });
 
-    verifyOTPLogin({ phoneNumber, OTP })
+    SaveNewPhonePassword({ phoneNumber, OTP, password })
       .then((data) => {
         // toast.error(data.data.message);
         console.log(data);
@@ -56,20 +67,17 @@ const VerifyLoginOTPPage = () => {
           toast.error(data.data.message);
           setValues({ ...values, error: data.data.message, success: false });
         } else if (data.data.status == 200) {
-          // REAL
-          authenticate(data, () => {
-            setValues({
-              ...values,
-              success: true,
-            });
-            console.log("THIS IS DATA", data);
-            toast.success(data.data.message);
-            console.log("Ankush");
-
-            setTimeout(() => {
-              navigate("/");
-            }, 3000);
+          setValues({
+            ...values,
+            success: true,
           });
+          console.log("THIS IS DATA", data);
+          toast.success(data.data.message);
+          console.log("Ankush");
+
+          setTimeout(() => {
+            navigate("/LoginNumber");
+          }, 3000);
         }
       })
       .catch((error) => {
@@ -83,12 +91,16 @@ const VerifyLoginOTPPage = () => {
       <Wrapper className="full-page">
         <form className="form" onSubmit={onSubmit}>
           <Logo />
-
           <h3>
-            <h3 class="title">OTP LOGIN PAGE</h3>
-            <img className="img-fluid smallVerifyImage" src={Verify} alt="" />
+            <h3>Forget Password</h3>
+            <img
+              className="img-fluid smallVerifyImage"
+              src={ForgetPassword}
+              alt=""
+            />
           </h3>
 
+          {/* Phone Number */}
           <FormRow
             type="text"
             name="phoneNumber"
@@ -96,28 +108,28 @@ const VerifyLoginOTPPage = () => {
             handleChange={handleChange}
           />
 
+          {/* Password Field */}
+          <FormRow
+            type="password"
+            name="password"
+            values={values.password}
+            handleChange={handleChange}
+          />
+
+          {/* OTP */}
           <FormRow
             type="text"
             name="OTP"
             values={values.OTP}
             handleChange={handleChange}
           />
-
           <button type="submit" className="btn btn-block" onClick={onSubmit}>
-            Submit
+            Reset Password
           </button>
-
-          <p>
-            <span>
-              <Link to="/home" className="member-btn centerinVerifyPage">
-                Go Back to Home
-              </Link>
-            </span>
-          </p>
         </form>
       </Wrapper>
     </div>
   );
 };
 
-export default VerifyLoginOTPPage;
+export default CreateNewPhonePasswordPage;

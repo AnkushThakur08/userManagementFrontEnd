@@ -1,34 +1,41 @@
 import React, { useState } from "react";
 
 // React-Router
-import { useNavigate } from "react-router-dom";
+
+import { useNavigate, useParams } from "react-router-dom";
 
 // Toast
 import { toast } from "react-toastify";
 
 // Components
-import { Logo, FormRow } from "../components";
-import ForgetPassword from "../assets/images/forgetPassword.svg";
+import { Logo, FormRow } from "../../components";
+import ForgetPassword from "../../assets/images/forget2.svg";
 
 // CSS
-import Wrapper from "../assets/wrappers/RegisterPage";
+import Wrapper from "../../assets/wrappers/RegisterPage";
 
 // API
-import { API } from "../backend";
-import { forgetPassword } from "../helper/ApiCall";
+import { API } from "../../backend";
+import { SaveNewPassword } from "../../helper/ApiCall";
 
 const initialState = {
   email: "",
+  password: "",
   success: false,
   error: "",
 };
 
-const ForgetMailPasswordPage = () => {
+const CreateNewMailPasswordPage = () => {
+  // Params
+  const params = useParams();
+  const id = params.id;
+
+  //   Navigate
   const navigate = useNavigate();
 
   const [values, setValues] = useState(initialState);
 
-  const { email } = values;
+  const { /* email, */ password } = values;
 
   console.log(`${API}`);
 
@@ -46,13 +53,13 @@ const ForgetMailPasswordPage = () => {
     e.preventDefault();
     console.log(e.target);
 
-    if (!email) {
-      console.log("Please Enter your Email");
-      return toast.error("Please Enter your Email");
+    if (/* !email || */ !password) {
+      console.log("Please Enter your Password");
+      return toast.error("Please Enter your Password");
     }
     setValues({ ...values, error: false });
 
-    forgetPassword({ email })
+    SaveNewPassword({ /* email, */ id, password })
       .then((data) => {
         console.log(data);
         if (data.data.status == 400) {
@@ -66,15 +73,15 @@ const ForgetMailPasswordPage = () => {
           toast.success(data.data.message);
 
           setTimeout(() => {
-            navigate("/resetPassword");
+            navigate("/Login");
           }, 3000);
 
           console.log("Ankush");
         }
       })
       .catch((error) => {
-        toast.error("Unable to Send the Mail");
-        console.log("Unable to Send the Mail");
+        toast.error("Unable to update the password");
+        console.log("Unable to update the password");
       });
   };
 
@@ -86,22 +93,29 @@ const ForgetMailPasswordPage = () => {
           <h3>
             <h3>Forget Password</h3>
             <img
-              className="img-fluid smallforgetPassword"
+              className="img-fluid smallVerifyImage"
               src={ForgetPassword}
               alt=""
             />
           </h3>
 
           {/* Email Field */}
-          <FormRow
+          {/* <FormRow
             type="email"
             name="email"
             values={values.email}
             handleChange={handleChange}
+          /> */}
+
+          {/* Password Field */}
+          <FormRow
+            type="password"
+            name="password"
+            values={values.password}
+            handleChange={handleChange}
           />
-          
           <button type="submit" className="btn btn-block" onClick={onSubmit}>
-            Send Mail
+            Reset Password
           </button>
         </form>
       </Wrapper>
@@ -109,4 +123,4 @@ const ForgetMailPasswordPage = () => {
   );
 };
 
-export default ForgetMailPasswordPage;
+export default CreateNewMailPasswordPage;

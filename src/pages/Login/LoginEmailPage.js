@@ -7,18 +7,18 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 // Components
-import { Logo, FormRow } from "../components";
+import { Logo, FormRow } from "../../components";
 
 // Icons
 import { FcGoogle } from "react-icons/fc";
 import { AiFillFacebook } from "react-icons/ai";
 
 // CSS
-import Wrapper from "../assets/wrappers/RegisterPage";
+import Wrapper from "../../assets/wrappers/RegisterPage";
 
 // API
-import { API } from "../backend";
-import { signIn, authenticate } from "../helper/ApiCall";
+import { API } from "../../backend";
+import { signIn, authenticate } from "../../helper/ApiCall";
 
 const initialState = {
   email: "",

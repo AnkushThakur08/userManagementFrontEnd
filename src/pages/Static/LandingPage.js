@@ -1,9 +1,16 @@
 import React from "react";
+
+// React Router
 import { Link } from "react-router-dom";
-import main from "../assets/images/main.svg";
-import Wrapper from "../assets/wrappers/LandingPage";
-import { Logo } from "../components/index";
-import { isAuthenticated } from "../helper/ApiCall";
+
+// Assets
+import main from "../../assets/images/main.svg";
+
+// Components
+import { Logo } from "../../components/index";
+
+// CSS
+import Wrapper from "../../assets/wrappers/LandingPage";
 
 const LandingPage = () => {
   return (

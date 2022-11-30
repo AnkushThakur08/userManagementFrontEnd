@@ -1,41 +1,34 @@
 import React, { useState } from "react";
 
 // React-Router
-
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Toast
 import { toast } from "react-toastify";
 
 // Components
-import { Logo, FormRow } from "../components";
-import ForgetPassword from "../assets/images/forget2.svg";
+import { Logo, FormRow } from "../../components";
+import ForgetPassword from "../../assets/images/forgetPassword.svg";
 
 // CSS
-import Wrapper from "../assets/wrappers/RegisterPage";
+import Wrapper from "../../assets/wrappers/RegisterPage";
 
 // API
-import { API } from "../backend";
-import { SaveNewPassword } from "../helper/ApiCall";
+import { API } from "../../backend";
+import { loginOTP } from "../../helper/ApiCall";
 
 const initialState = {
-  email: "",
-  password: "",
+  phoneNumber: "",
   success: false,
   error: "",
 };
 
-const CreateNewMailPasswordPage = () => {
-  // Params
-  const { token } = useParams();
-  console.log(token);
-
-  //   Navigate
+const ForgetPhonePasswordPage = () => {
   const navigate = useNavigate();
 
   const [values, setValues] = useState(initialState);
 
-  const { email, password } = values;
+  const { phoneNumber } = values;
 
   console.log(`${API}`);
 
@@ -48,40 +41,53 @@ const CreateNewMailPasswordPage = () => {
     setValues({ ...values, error: false, [name]: value });
   };
 
-  // When user Enter Email & Password
   const onSubmit = (e) => {
     e.preventDefault();
     console.log(e.target);
+  };
 
-    if (!email || !password) {
-      console.log("Please Enter Email and Password");
-      return toast.error("Please Enter Email and Password");
+  // When user Enter Email & Password
+  const SendOTP = (e) => {
+    console.log("SUCCESS");
+    e.preventDefault();
+    console.log(e.target);
+
+    const { phoneNumber } = values;
+    console.log(phoneNumber);
+
+    if (!phoneNumber) {
+      console.log("Please Enter the Phone Number");
+      return toast.error("Please Enter the Phone Number");
     }
     setValues({ ...values, error: false });
 
-    SaveNewPassword({ email, password })
+    loginOTP({ phoneNumber })
       .then((data) => {
+        // toast.error(data.data.message);
         console.log(data);
+        // console.log(data.data.message);
         if (data.data.status == 400) {
           toast.error(data.data.message);
           setValues({ ...values, error: data.data.message, success: false });
         } else if (data.data.status == 200) {
           setValues({
             ...values,
+            phoneNumber: "",
             success: true,
+            error: "false",
           });
           toast.success(data.data.message);
 
-          setTimeout(() => {
-            navigate("/Login");
-          }, 3000);
-
           console.log("Ankush");
+
+          setTimeout(() => {
+            navigate("/resetPhone");
+          }, 3000);
         }
       })
       .catch((error) => {
-        toast.error("Unable to update the password");
-        console.log("Unable to update the password");
+        toast.error("Error in Sending the OTP");
+        console.log("Error in Sending the OTP");
       });
   };
 
@@ -93,29 +99,22 @@ const CreateNewMailPasswordPage = () => {
           <h3>
             <h3>Forget Password</h3>
             <img
-              className="img-fluid smallVerifyImage"
+              className="img-fluid smallforgetPassword"
               src={ForgetPassword}
               alt=""
             />
           </h3>
 
-          {/* Email Field */}
+          {/* Phone Number Field */}
           <FormRow
-            type="email"
-            name="email"
-            values={values.email}
+            type="text"
+            name="phoneNumber"
+            values={values.phoneNumber}
             handleChange={handleChange}
           />
 
-          {/* Password Field */}
-          <FormRow
-            type="password"
-            name="password"
-            values={values.password}
-            handleChange={handleChange}
-          />
-          <button type="submit" className="btn btn-block" onClick={onSubmit}>
-            Reset Password
+          <button type="submit" className="btn btn-block" onClick={SendOTP}>
+            Send OTP
           </button>
         </form>
       </Wrapper>
@@ -123,4 +122,4 @@ const CreateNewMailPasswordPage = () => {
   );
 };
 
-export default CreateNewMailPasswordPage;
+export default ForgetPhonePasswordPage;

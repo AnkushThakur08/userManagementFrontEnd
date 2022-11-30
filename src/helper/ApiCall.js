@@ -1,3 +1,5 @@
+import React, { useCon } from "react";
+
 import { API } from "../backend";
 
 // Registration and Login API
@@ -242,7 +244,7 @@ export const RejectInvite = async (user) => {
 };
 
 export const updateUser = async (token, user) => {
-  return await fetch(`${API}updateUser`, {
+  return await fetch(`${API}/updateUser`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -271,7 +273,48 @@ export const registrationByGoogle = async (user) => {
     });
 };
 
-// Middleware
+export const getNotifications = async () => {
+  return fetch(`${API}/getNotification`, {
+    method: "GET",
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((error) => console.log(error));
+};
+
+export const getInvities = async () => {
+  return fetch(`${API}/allInvities`, {
+    method: "GET",
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((error) => console.log(error));
+};
+
+// FIXME: COUNT
+export const getAllUser = async () => {
+  return fetch(`${API}/getAllUser`, {
+    method: "GET",
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((error) => console.log(error));
+};
+
+export const countAllUser = async () => {
+  return fetch(`${API}/countAllUser`, {
+    method: "GET",
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((error) => console.log(error));
+};
+
+//TODO: Middleware
 export const authenticate = (data, next) => {
   // This Function store the JWT token(auth token) of the user in the localStorage
   if (typeof window !== "undefined") {
@@ -286,6 +329,7 @@ export const isAuthenticated = () => {
   if (typeof window == "undefined") {
     return false;
   }
+
   if (localStorage.getItem("jwt")) {
     return JSON.parse(localStorage.getItem("jwt"));
   } else {
@@ -293,26 +337,27 @@ export const isAuthenticated = () => {
   }
 };
 
-export const countAllUser = async () => {
-  return fetch(`${API}/countAllUser`, {
-    method: "GET",
-  })
-    .then((response) => {
-      return response.json();
-    })
-    .catch((error) => console.log(error));
-};
-
 // Signout
 export const signout = () => {
   if (typeof window !== "undefined") {
-    localStorage.removeItem("jwt");
+    // localStorage.removeItem("jwt");
     // next();
-
     // return fetch(`${API}/signout1`, {
     //   method: "GET",
     // })
     //   .then((response) => console.log(response))
     //   .catch((error) => console.log(error));
+  }
+};
+
+export const isAuthenticated2 = () => {
+  if (typeof window == "undefined") {
+    return false;
+  }
+
+  if (localStorage.getItem("user")) {
+    return JSON.parse(localStorage.getItem("user"));
+  } else {
+    return false;
   }
 };

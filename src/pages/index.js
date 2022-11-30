@@ -1,16 +1,16 @@
-import LandingPage from "./LandingPage";
-import ErrorPage from "./ErrorPage";
-import VerifyPage from "./VerifyPage";
-import RegistrationEmailPage from "./RegistrationEmailPage";
-import RegistrationPhonePage from "./RegistrationPhonePage";
-import LoginEmailPage from "./LoginEmailPage";
-import LoginPhonePage from "./LoginPhonePage";
-import VerifyLoginOTPPage from "./VerifyLoginOTPPage";
-import ForgetMailPasswordPage from "./ForgetMailPasswordPage";
-import CreateNewMailPasswordPage from "./CreateNewMailPasswordPage";
-import ForgetPhonePasswordPage from "./ForgetPhonePasswordPage";
-import CreateNewPhonePasswordPage from "./CreateNewPhonePasswordPage";
-import AcceptInvitePage from "./AcceptInvitePage";
+import LandingPage from "./Static/LandingPage";
+import ErrorPage from "./Static/ErrorPage";
+import VerifyPage from "./Login/VerifyPage";
+import RegistrationEmailPage from "./Registration/RegistrationEmailPage";
+import RegistrationPhonePage from "./Registration/RegistrationPhonePage";
+import LoginEmailPage from "./Login/LoginEmailPage";
+import LoginPhonePage from "./Login/LoginPhonePage";
+import VerifyLoginOTPPage from "./Login/VerifyLoginOTPPage";
+import ForgetMailPasswordPage from "./ForgetPassword/ForgetMailPasswordPage";
+import CreateNewMailPasswordPage from "./ForgetPassword/CreateNewMailPasswordPage";
+import ForgetPhonePasswordPage from "./ForgetPassword/ForgetPhonePasswordPage";
+import CreateNewPhonePasswordPage from "./ForgetPassword/CreateNewPhonePasswordPage";
+import AcceptInvitePage from "./Dashboard/AcceptInvitePage";
 
 export {
   LandingPage,

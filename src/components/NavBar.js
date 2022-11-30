@@ -148,7 +148,8 @@ const NavBar = () => {
               <FaUserCircle />
               {/* Ankush */}
               {/* TODO: User name user?.name*/}
-              {data.user.name || "Ankush"}
+              {data ? data.user.name : "Ankush"}
+              {/* {data.user.name} */}
               <FaCaretDown />
             </button>
 

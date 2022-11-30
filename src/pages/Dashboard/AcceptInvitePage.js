@@ -1,21 +1,21 @@
 import React, { useState } from "react";
 
 // React-Router
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 // Toast
 import { toast } from "react-toastify";
 
 // Components
-import { Logo, FormRow } from "../components";
-import invite from "../assets/images/invite.svg";
+import { Logo, FormRow } from "../../components";
+import invite from "../../assets/images/invite.svg";
 
 // CSS
-import Wrapper from "../assets/wrappers/RegisterPage";
+import Wrapper from "../../assets/wrappers/RegisterPage";
 
 // API
-import { API } from "../backend";
-import { AcceptInvite, RejectInvite } from "../helper/ApiCall";
+import { API } from "../../backend";
+import { AcceptInvite, RejectInvite } from "../../helper/ApiCall";
 
 const initialState = {
   email: "",
@@ -25,12 +25,16 @@ const initialState = {
 };
 
 const AcceptInvitePage = () => {
+  // Params
+  const params = useParams();
+  const id = params.id;
+  const senderid = params.senderid;
   //   Navigate
   const navigate = useNavigate();
 
   const [values, setValues] = useState(initialState);
 
-  const { email, senderEmail } = values;
+  const { /* email, */ senderEmail } = values;
 
   console.log(`${API}`);
 
@@ -45,13 +49,13 @@ const AcceptInvitePage = () => {
 
   // When user Enter Email & Password
   const Accept = () => {
-    if (!email || !senderEmail) {
+    if (/* !email || */ !senderEmail) {
       console.log("Please Enter All the Fields");
       return toast.error("Please Enter All the Fields");
     }
     setValues({ ...values, error: false });
 
-    AcceptInvite({ email, senderEmail })
+    AcceptInvite({ /* email, */ id, senderEmail })
       .then((data) => {
         console.log(data);
         if (data.data.status == 400) {
@@ -79,13 +83,13 @@ const AcceptInvitePage = () => {
 
   const Reject = () => {
     console.log("REJECT");
-    if (!email || !senderEmail) {
+    if (/* !email ||  */ !senderEmail) {
       console.log("Please Enter All the Fields");
       return toast.error("Please Enter All the Fields");
     }
     setValues({ ...values, error: false });
 
-    RejectInvite({ email, senderEmail })
+    RejectInvite({ /* email, */ id, senderEmail })
       .then((data) => {
         console.log(data);
         if (data.data.status == 400) {
@@ -126,15 +130,15 @@ const AcceptInvitePage = () => {
             <img className="img-fluid smallVerifyImage" src={invite} alt="" />
           </h3>
 
-          {/* Email Field */}
-          <FormRow
+          {/* <FormRow
             type="email"
             name="email"
             values={values.email}
             handleChange={handleChange}
-          />
+          /> */}
 
-          {/* Password Field */}
+          {/*Sender Email Field */}
+
           <FormRow
             type="text"
             name="senderEmail"

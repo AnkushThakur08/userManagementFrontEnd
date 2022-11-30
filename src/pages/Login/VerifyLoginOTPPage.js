@@ -7,19 +7,20 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 // CSS
-import Wrapper from "../assets/wrappers/RegisterPage";
+import Wrapper from "../../assets/wrappers/RegisterPage";
 
 // Components
-import Verify from "../assets/images/verify.svg";
-import { Logo, FormRow } from "../components";
+import Verify from "../../assets/images/verify.svg";
+import { Logo, FormRow } from "../../components";
 
 // API
-import { verifyOTP } from "../helper/ApiCall";
+import { verifyOTPLogin, authenticate } from "../../helper/ApiCall";
 
-const VerifyPage = () => {
+const VerifyLoginOTPPage = () => {
   const navigate = useNavigate();
 
   const [values, setValues] = useState({
+    phoneNumber: "",
     OTP: "",
     error: "",
     success: "false",
@@ -38,15 +39,15 @@ const VerifyPage = () => {
     e.preventDefault();
     console.log(e.target);
 
-    const { OTP } = values;
+    const { phoneNumber, OTP } = values;
 
-    if (!OTP) {
-      console.log("Please Enter the OTP");
-      return toast.error("Please Enter the OTP");
+    if (!OTP || !phoneNumber) {
+      console.log("Please Enter the Number & OTP");
+      return toast.error("Please Enter the Number & OTP");
     }
     setValues({ ...values, error: false });
 
-    verifyOTP({ OTP })
+    verifyOTPLogin({ phoneNumber, OTP })
       .then((data) => {
         // toast.error(data.data.message);
         console.log(data);
@@ -55,17 +56,20 @@ const VerifyPage = () => {
           toast.error(data.data.message);
           setValues({ ...values, error: data.data.message, success: false });
         } else if (data.data.status == 200) {
-          setValues({
-            ...values,
-            OTP: "",
-            success: true,
-          });
-          toast.success(data.data.message);
-          console.log("Ankush");
+          // REAL
+          authenticate(data, () => {
+            setValues({
+              ...values,
+              success: true,
+            });
+            console.log("THIS IS DATA", data);
+            toast.success(data.data.message);
+            console.log("Ankush");
 
-          setTimeout(() => {
-            navigate("/verifyLogin");
-          }, 3000);
+            setTimeout(() => {
+              navigate("/");
+            }, 3000);
+          });
         }
       })
       .catch((error) => {
@@ -81,8 +85,16 @@ const VerifyPage = () => {
           <Logo />
 
           <h3>
+            <h3 class="title">OTP LOGIN PAGE</h3>
             <img className="img-fluid smallVerifyImage" src={Verify} alt="" />
           </h3>
+
+          <FormRow
+            type="text"
+            name="phoneNumber"
+            values={values.phoneNumber}
+            handleChange={handleChange}
+          />
 
           <FormRow
             type="text"
@@ -108,4 +120,4 @@ const VerifyPage = () => {
   );
 };
 
-export default VerifyPage;
+export default VerifyLoginOTPPage;

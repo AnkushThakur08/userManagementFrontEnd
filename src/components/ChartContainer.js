@@ -12,67 +12,77 @@ import Wrapper from "../assets/wrappers/ChartsContainer";
 
 // API
 import { API } from "../backend";
-import { countAllUser } from "../helper/ApiCall";
+import { getAllUser } from "../helper/ApiCall";
 
 const ChartContainer = () => {
   const [values, setValues] = useState({
     error: "",
     success: "false",
-    data: [],
+    datas: [],
   });
 
-  // Destructure
-  // const { data, error, success } = values;
   const preload = () => {
-    countAllUser().then((data) => {
+    getAllUser().then((data) => {
+      console.log(data);
+      console.log(data.data);
       if (data.data.status == 400) {
-        toast.error(data.data.message);
-        setValues({ ...values, error: data.data.message, success: false });
+        toast.error("ERROR");
+        setValues({ ...values, success: false });
       } else {
-        console.log(data.data.user.rows);
-        console.log(data.data.user.rows[0].authenticationMethod);
-        setValues({ ...values, data: data.data.user.rows });
+        console.log(data.data);
+        setValues({ ...values, datas: data.data });
       }
     });
   };
+
+  console.log(values.datas);
+  console.log(values.datas.countByPhoneNumber);
 
   useEffect(() => {
     preload();
   }, []);
 
+  var { datas } = values;
+  console.log(datas);
+
   const data = [
     {
-      AuthenticationMethod: "Email",
-      count: 5,
-    },
-    {
       AuthenticationMethod: "Phone Number",
-      count: 10,
+      count: values.datas.countByPhoneNumber,
     },
+
     {
-      AuthenticationMethod: "Facebook",
-      count: 4,
+      AuthenticationMethod: "Email",
+      count: values.datas.countuserByEmail,
     },
+
     {
       AuthenticationMethod: "Google",
-      count: 3,
+      count: values.datas.getUserBygoogleId,
+    },
+
+    {
+      AuthenticationMethod: "Facebook",
+      count: values.datas.getUserByFacebookId,
     },
   ];
 
   const [barChart, setBarChart] = useState(true);
   return (
-    <Wrapper>
-      <h2>User Details Chart</h2>
-      <button type="button" onClick={() => setBarChart(!barChart)}>
-        {barChart ? "Area Chart" : "Bar Chart"}
-      </button>
+    <div id="charts">
+      <Wrapper>
+        <h2>User Details Chart</h2>
+        <button type="button" onClick={() => setBarChart(!barChart)}>
+          {barChart ? "Area Chart" : "Bar Chart"}
+        </button>
 
-      {data.map((individualData, index) => {
-        console.log(individualData);
-      })}
+        {data.map((individualData, index) => {
+          console.log(individualData);
+        })}
 
-      {barChart ? <BarCharts data={data} /> : <AreaCharts data={data} />}
-    </Wrapper>
+        {barChart ? <BarCharts data={data} /> : <AreaCharts data={data} />}
+      </Wrapper>
+    </div>
   );
 };
 
