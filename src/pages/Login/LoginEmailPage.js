@@ -86,6 +86,20 @@ const LoginEmailPage = () => {
       });
   };
 
+  const RegistrationByGoogle1 = (e) => {
+    e.preventDefault();
+    console.log(e.target);
+
+    window.open(`http://localhost:8000/api/google/`, "_self");
+  };
+
+  const RegistrationByFacebook = (e) => {
+    e.preventDefault();
+    console.log(e.target);
+
+    window.open(`http://localhost:8000/api/auth/facebook`, "_self");
+  };
+
   return (
     <div>
       <Wrapper className="full-page">
@@ -130,11 +144,11 @@ const LoginEmailPage = () => {
           </p>
 
           <div className="socialButtonWrapper">
-            <button type="submit" className="socialButton" onClick={onSubmit}>
+            <button type="submit" className="socialButton" onClick={RegistrationByGoogle1}>
               <FcGoogle size={48} />
             </button>
 
-            <button type="submit" className="socialButton" onClick={onSubmit}>
+            <button type="submit" className="socialButton" onClick={RegistrationByFacebook}>
               <AiFillFacebook size={48} color="#3b82f6" />
             </button>
           </div>

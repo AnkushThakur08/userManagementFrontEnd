@@ -52,7 +52,7 @@ const App = () => {
   return (
     <AuthProvider>
       <BrowserRouter>
-        {console.log(Boolean(isAuthenticated()))}
+        {console.log("CHECK!!!!", Boolean(isAuthenticated()))}
         <Routes>
           <Route
             path="/"

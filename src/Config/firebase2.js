@@ -14,6 +14,16 @@ const firebaseConfig2 = {
   storageBucket: "reactchatonetoone.appspot.com",
   messagingSenderId: "952920489963",
   appId: "1:952920489963:web:0b9fb4871ba5db3671e3ae",
+
+
+
+  // apiKey: "AIzaSyDzOaOi4cNSXfjgRLrhelezhUlNwoRoW1A",
+  // authDomain: "chat-final-a1783.firebaseapp.com",
+  // databaseURL: "https://chat-final-a1783-default-rtdb.firebaseio.com",
+  // projectId: "chat-final-a1783",
+  // storageBucket: "chat-final-a1783.appspot.com",
+  // messagingSenderId: "1076086394581",
+  // appId: "1:1076086394581:web:1ff0172f0f5bd3cc499c5c"
 };
 
 // Initialize Firebase

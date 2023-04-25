@@ -62,21 +62,27 @@ const FirebaseRegister = () => {
       );
       console.log(result.user);
 
+      if (result.user) {
+        console.log("HERE!!!")
+        toast.success("User Registered Successfully");
+      } else {
+        console.log("HsdfsdERE!!!")
+
+        toast.error("User Registered Failed");
+      }
+      navigate("/firebaseLogin");
+
       // Setting user in Firebase Store/Chatting DB
       await setDoc(doc(db, "users", result.user.uid), {
         uid: result.user.uid,
         name,
         email,
         createdAt: Timestamp.fromDate(new Date()),
+        
         isOnline: true,
       });
 
-      if (result) {
-        toast.success("User Registered Successfully");
-      } else {
-        toast.error("User Registered Failed");
-      }
-      navigate("/firebaseLogin");
+      
 
       // resetting the state
       setValues({
@@ -96,7 +102,7 @@ const FirebaseRegister = () => {
       <Wrapper className="full-page">
         <form className="form" onSubmit={onSubmit}>
           <Logo />
-          <h3>Chat Registration</h3>
+          <h3>Chat Registration </h3>
           {/* Name Field */}
           <FormRow
             type="text"

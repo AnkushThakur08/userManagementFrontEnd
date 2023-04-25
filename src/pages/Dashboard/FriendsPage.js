@@ -1,36 +1,37 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable */
+import React, { useState, useEffect } from 'react';
 
 // Toast
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
 
 // Components
-import { FormRow } from "../../components";
+import { FormRow } from '../../components';
 
 // CSS
-import Wrapper from "../../assets/wrappers/DashboardFormPage";
-import Wrapper1 from "../../assets/wrappers/showFriend";
+import Wrapper from '../../assets/wrappers/DashboardFormPage';
+import Wrapper1 from '../../assets/wrappers/showFriend';
 
 // API
-import { API } from "../../backend";
+import { API } from '../../backend';
 import {
   countAllUser,
   SendInviteFriendMail,
   isAuthenticated,
-} from "../../helper/ApiCall";
+} from '../../helper/ApiCall';
 
 const { data } = isAuthenticated();
-// console.log(data.user.name);
-// console.log(data.user.email);
+console.log(data.user.name);
+console.log(data.user.email);
 
 const initialState = {
-  email: "",
-  name: "",
-  senderName: data ? `${data.user.name}` : "Ankush",
+  email: '',
+  name: '',
+  senderName: data ? `${data.user.name}` : 'Ankush',
   // senderName: `${data.user.name}`,
   // senderid: `${data.user.email}`,
-  senderid: data ? `${data.user.email}` : "",
+  senderid: data ? `${data.user.email}` : '',
   success: false,
-  error: "",
+  error: '',
 };
 const FriendsPage = () => {
   // const [user, setUser] = useState([]);
@@ -56,9 +57,12 @@ const FriendsPage = () => {
     console.log(e.target);
 
     if (!email || !name) {
-      console.log("Please Fill out all the Fields");
-      toast.error("Please Fill out all the Fields");
+      console.log('Please Fill out all the Fields');
+      toast.error('Please Fill out all the Fields');
     }
+
+    console.log("senderName",senderName)
+    console.log("senderName",senderName)
 
     SendInviteFriendMail({ name, email, senderName, senderid })
       .then((data) => {
@@ -77,12 +81,12 @@ const FriendsPage = () => {
             // navigate("/resetPassword");
           }, 3000);
 
-          console.log("Ankush");
+          console.log('Ankush');
         }
       })
       .catch((error) => {
-        toast.error("Unable to Send the Mail");
-        console.log("Unable to Send the Mail");
+        toast.error('Unable to Send the Mail');
+        console.log('Unable to Send the Mail');
       });
   };
 

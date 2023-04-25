@@ -53,14 +53,24 @@ const FirebaseLogin = () => {
     try {
       // Logging the user
       const result = await signInWithEmailAndPassword(auth, email, password);
-      console.log(result.user);
 
       localStorage.setItem("user", JSON.stringify(result.user));
 
-      // Setting user in Firebase Store/Chatting DB
-      await updateDoc(doc(db, "users", result.user.uid), {
-        isOnline: true,
-      });
+        // Setting user in Firebase Store/Chatting DB
+        await updateDoc(doc(db, "users", result.user.uid), {
+          isOnline: true,
+        }).then((res) => {
+          console.log("INSIDE", res)
+
+        }).catch((err) => {
+          console.log("ERROR", err)
+        })
+
+
+        // const userDocRef = doc(db, "users", result.user.uid);
+        // const isOnlineField = { isOnline: true };
+        // await updateDoc(userDocRef, isOnlineField);
+
 
       if (result) {
         toast.success("User LoggedIn Successfully");
@@ -68,7 +78,14 @@ const FirebaseLogin = () => {
         toast.error("User unable to LoggedIn ");
       }
 
+     
+
+      // console.log("check@@@@", check)
+
+    
+
       navigate("/OnetoOneChat");
+
 
       // resetting the state
       setValues({

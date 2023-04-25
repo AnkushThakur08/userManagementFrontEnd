@@ -1,27 +1,27 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 // Icons
-import { FaAlignLeft, FaUserCircle, FaCaretDown } from "react-icons/fa";
-import { FaTimes } from "react-icons/fa";
+import { FaAlignLeft, FaUserCircle, FaCaretDown } from 'react-icons/fa';
+import { FaTimes } from 'react-icons/fa';
 
 // Assets
-import Logo from "./Logo";
+import Logo from './Logo';
 
 // React Router
-import links from "../helper/links";
-import { NavLink, useNavigate, Outlet } from "react-router-dom";
+import links from '../helper/links';
+import { NavLink, useNavigate, Outlet } from 'react-router-dom';
 
 // CSS
-import Wrapper from "../assets/wrappers/Navbar";
-import SideNavBarWrapper from "../assets/wrappers/SmallSidebar";
-import BigSideBarWrapper from "../assets/wrappers/BigSidebar";
-import Wrapper3 from "../assets/wrappers/SharedLayout";
+import Wrapper from '../assets/wrappers/Navbar';
+import SideNavBarWrapper from '../assets/wrappers/SmallSidebar';
+import BigSideBarWrapper from '../assets/wrappers/BigSidebar';
+import Wrapper3 from '../assets/wrappers/SharedLayout';
 
 // API
-import { signout, isAuthenticated } from "../helper/ApiCall";
+import { signout, isAuthenticated } from '../helper/ApiCall';
 
 // Toast
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
 
 const NavBar = () => {
   // Navigate
@@ -41,8 +41,8 @@ const NavBar = () => {
         <div
           className={
             isSideBarOpen
-              ? "sidebar-container show-sidebar"
-              : "sidebar-container"
+              ? 'sidebar-container show-sidebar'
+              : 'sidebar-container'
           }
         >
           <div className="content">
@@ -64,7 +64,7 @@ const NavBar = () => {
                   <NavLink
                     to={path}
                     className={({ isActive }) => {
-                      return isActive ? "nav-link active" : "nav-link";
+                      return isActive ? 'nav-link active' : 'nav-link';
                     }}
                     key={id}
                     onClick={() => setIsSideBarOpen(!isSideBarOpen)}
@@ -87,8 +87,8 @@ const NavBar = () => {
         <div
           className={
             isSideBarOpen
-              ? "sidebar-container"
-              : "sidebar-container show-sidebar"
+              ? 'sidebar-container'
+              : 'sidebar-container show-sidebar'
           }
         >
           <div className="content">
@@ -103,7 +103,7 @@ const NavBar = () => {
                 <NavLink
                   to={path}
                   className={({ isActive }) => {
-                    return isActive ? "nav-link active" : "nav-link";
+                    return isActive ? 'nav-link active' : 'nav-link';
                   }}
                   key={id}
                 >
@@ -148,22 +148,22 @@ const NavBar = () => {
               <FaUserCircle />
               {/* Ankush */}
               {/* TODO: User name user?.name*/}
-              {data ? data.user.name : "Ankush"}
+              {data ? data.user.name : 'Ankush'}
               {/* {data.user.name} */}
               <FaCaretDown />
             </button>
 
-            <div className={showLogout ? "dropdown show-dropdown" : "dropdown"}>
+            <div className={showLogout ? 'dropdown show-dropdown' : 'dropdown'}>
               <button
                 type="button"
                 className="dropdown-btn"
                 onClick={() => {
                   signout();
 
-                  toast.success("User Logout Successfully");
+                  toast.success('User Logout Successfully');
 
                   setTimeout(() => {
-                    navigate("/home");
+                    navigate('/home');
                   }, 2000);
                 }}
               >
