@@ -4,7 +4,7 @@
 
 ![](https://img.shields.io/badge/UserManagement-MERN%20App-blue)
 
-# Developed by : `Ankush Thakur and Tanvi Negi`
+# Developed by : `Ankush Thakur`
 
 # Technology Used
 
